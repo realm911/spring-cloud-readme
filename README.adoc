@@ -1,0 +1,7 @@
+记录Spring Cloud使用中的问题及疑惑
+
+
+1.RestControllerEndpoint
+是REST风格的Controller，使用了actuator之后，默认加到/actuator/之后。
+例如RestControllerEndpoint(id="gateway")，访问路径为/actuator/gateway.
+只有management.endpoints.web.exposure.include:"*"中包含了此uri之后，才能建立映射。
