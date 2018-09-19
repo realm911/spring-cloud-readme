@@ -5,3 +5,70 @@
 是REST风格的Controller，使用了actuator之后，默认加到/actuator/之后。
 例如RestControllerEndpoint(id="gateway")，访问路径为/actuator/gateway.
 只有management.endpoints.web.exposure.include:"*"中包含了此uri之后，才能建立映射。
+
+
+2.spring gateway配置的相关属性
+spring:
+  cloud:
+    gateway:
+      routes:
+      - id:
+        uri:
+        order:
+        predicates:
+        - name:
+          args:
+        filters:
+        - name:
+          args:
+      - id:
+        uri:
+        order:
+        predicates:
+         - Path=/foo/{segment}
+         - Method=GET
+         - Query=foo, ba.
+         - RemoteAddr=192.168.1.1/24
+        filters:
+        - AddRequestHeader=X-Request-Foo, Bar
+        - AddRequestParameter=foo, bar
+        - AddResponseHeader=X-Response-Foo, Bar
+        - Hystrix=myCommandName
+        - RewritePath=/consumingserviceendpoint, /backingserviceendpoint
+        - PrefixPath=/mypath
+        - PreserveHostHeader
+        - name: RequestRateLimiter
+          args:
+            redis-rate-limiter.replenishRate: 10
+            redis-rate-limiter.burstCapacity: 20
+      defaultFilters:
+      streamingMediaTypes:
+      globalcors: {
+
+      }
+      httpclient:
+        connectTimeout: 30000
+        responseTimeout:
+        pool:
+          type: ELASTIC
+          name: proxy
+          maxConnections: 10
+          acquireTimeout: 10000
+        proxy:
+          host:
+          port:
+          username:
+          password:
+          nonProxyHostsPattern:
+        ssl:
+          useInsecureTrustManager: false
+          trustedX509Certificates:
+      discovery:
+        locator:
+          enabled: false
+          routeIdPrefix:
+          includeExpression: true
+          urlExpression:
+          lowerCaseServiceId:
+          predicates:
+          filters:
