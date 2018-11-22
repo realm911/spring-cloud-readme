@@ -72,3 +72,46 @@ spring:
           lowerCaseServiceId:
           predicates:
           filters:
+
+3.docker中安装mysql
+   docker pull mysql
+   docker run --name first-mysql -p 3306:3306 -e MYSQL\_ROOT\_PASSWORD=123456 -d mysql
+   上面指令的含义：
+   run            运行一个容器
+   --name         后面是这个镜像的名称
+   -p 3306:3306   表示在这个容器中使用3306端口(第二个)映射到本机的端口号也为3306(第一个)
+   -d             表示使用守护进程运行，即服务挂在后台
+   下载客户端程序Sequel Pro http://www.sequelpro.com/
+   配置客户端之后，提示访问不了。
+   
+   
+   docker exec -it first-mysql bash
+     -t 让docker分配一个伪终端，并绑定到容器的标准输入上；
+     -i 让容器的标准输入保持打开；
+     first-mysql 是容器的名字。
+   打开之后，使用mysql的命令开启远程访问的授权；
+     mysql -u root -p
+     
+     use mysql;
+     select host,user from user;
+     
+     需要增加一个host为%的记录。
+     
+     增加好之后，访问时提示
+     MySQL said: Authentication plugin 'caching_sha2_password' cannot be loaded:dlopen(/usr/local/lib/plugin/caching_sha2_password.so, 2): image not found
+     
+     通过指令：
+     ALTER USER 'username'@'ip_address' IDENTIFIED WITH mysql_native_password BY 'password';
+     
+     例如：
+     ALTER USER 'root'@'%' IDENTIFIED WITH mysql_native_password BY 'root';
+     
+     执行之后，可以通过Sequel Pro访问到MySQL数据库。
+   
+   
+   
+   
+   
+   
+   
+   
